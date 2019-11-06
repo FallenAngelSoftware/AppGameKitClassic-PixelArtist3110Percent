@@ -38,7 +38,7 @@ GameVersion = "''Retail2 110% - Turbo! - v3.2.5''"
 global DataVersion as string
 DataVersion = "PA3-Retail2-110-Turbo-v3_2_5.cfg"
 global HTML5DataVersion as String
-HTML5DataVersion = "-v3_2_5-"
+HTML5DataVersion = "PA3-v3_2_5-"
 
 #option_explicit
 SetErrorMode(2)
