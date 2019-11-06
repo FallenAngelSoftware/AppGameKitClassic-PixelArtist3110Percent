@@ -82,7 +82,7 @@ function LoadOptionsAndHighScores ( )
 					LevelSkip[index] = ReadInteger( 1 )
 				next index
 
-				for index = 0 to 4
+				for index = 0 to 3
 					SecretCode[index] = readInteger( 1 )
 				next index
 
@@ -113,7 +113,7 @@ function LoadOptionsAndHighScores ( )
 			if (cookieValue <> "No Value") then LevelSkip[index]= Val(cookieValue)
 		next index
 
-		for index = 0 to 4
+		for index = 0 to 3
 			cookieValue = LoadSharedVariable( "SecretCodeCookie"+HTML5DataVersion+str(index), "No Value" )
 			if (cookieValue <> "No Value") then SecretCode[index]= Val(cookieValue)
 		next index
@@ -146,7 +146,7 @@ function SaveOptionsAndHighScores ( )
 				WriteInteger ( 1, LevelSkip[index] )
 			next index
 	  
-			for index = 0 to 4
+			for index = 0 to 3
 				WriteInteger ( 1, SecretCode[index] )
 			next index
 
@@ -170,7 +170,7 @@ function SaveOptionsAndHighScores ( )
 			SaveSharedVariable( "LevelSkipCookie"+HTML5DataVersion+str(index), str(LevelSkip[index]) )
 		next index
 
-		for index = 0 to 4
+		for index = 0 to 3
 			SaveSharedVariable( "SecretCodeCookie"+HTML5DataVersion+str(index), str(SecretCode[index]) )
 		next index
 		
