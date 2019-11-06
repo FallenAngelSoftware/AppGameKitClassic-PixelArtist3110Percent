@@ -5,13 +5,14 @@ remstart
                                            JeZxLee's
                                                                    TM
                              AppGameKit Classic "NightRider" Engine
+                                        (Version 1.9.1)
            ____  _          _      _         _   _     _     _____   _ _  ___ _  __TM
           |  _ \(_)_  _____| |    / \   _ __| |_(_)___| |_  |___ /  / / |/ _ (_)/ /
           | |_) | \ \/ / _ \ |   / _ \ | '__| __| / __| __|   |_ \  | | | | | |/ / 
           |  __/| |>  <  __/ |  / ___ \| |  | |_| \__ \ |_   ___) | | | | |_| / /_ 
           |_|   |_/_/\_\___|_| /_/   \_\_|   \__|_|___/\__| |____/  |_|_|\___/_/(_)                                                                    
 
-                                    Retail2 110% - v3.2.4
+                                     Retail2 110% - v3.2.5              "Turbo!"
 
 ---------------------------------------------------------------------------------------------------     
 
@@ -33,11 +34,11 @@ remend
 #include "visuals.agc"
 
 global GameVersion as string
-GameVersion = "''Retail2 110% - Turbo! - v3.2.4''"
+GameVersion = "''Retail2 110% - Turbo! - v3.2.5''"
 global DataVersion as string
-DataVersion = "PA3-Retail2-110-Turbo-v3_2_4.cfg"
+DataVersion = "PA3-Retail2-110-Turbo-v3_2_5.cfg"
 global HTML5DataVersion as String
-HTML5DataVersion = "-v3_2_4-"
+HTML5DataVersion = "-v3_2_5-"
 
 #option_explicit
 SetErrorMode(2)
@@ -372,6 +373,9 @@ global NumberOfAboutScreenTexts
 NumberOfAboutScreenTexts = ATindex
 global StartIndexOfAboutScreenTexts
 StartIndexOfAboutScreenTexts = 0
+
+global AboutScreenOffsetY as float
+global AboutScreenBackgroundY as float
 
 global AboutScreenTextFrameSkip as integer
 

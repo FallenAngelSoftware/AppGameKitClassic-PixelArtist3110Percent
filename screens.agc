@@ -57,6 +57,8 @@ function ApplyScreenFadeTransition ( )
 		
 		SetSpriteColorAlpha( FadingBlackBG, ScreenFadeTransparency )
 	elseif ScreenFadeStatus = FadingToBlack
+		if (ScreenToDisplay = AboutScreen) then SetSpritePositionByOffset( FadingBlackBG, ScreenWidth/2, AboutScreenBackgroundY )
+		
 		if ScreenFadeTransparency < 255-85
 			inc ScreenFadeTransparency, 85
 			
@@ -1150,7 +1152,9 @@ function SetupAboutScreenTexts( )
 
 		AboutTextsScreenY[index] = startScreenY
 		
-		if (AboutTexts[index] = "GIGABYTE® GA-970A-DS3P 2.0 AM3+ Motherboard")
+		if (AboutTexts[index] = "Hyper-Custom ''JeZxLee'' Pro-Built Desktop")
+			CreateAndInitializeOutlinedText(outline, CurrentMinTextIndex, AboutTexts[index], 999, 15, 255, 255, AboutTextsBlue[index], 255, 0, 0, 0, 1, ScreenWidth/2, AboutTextsScreenY[index], 3)
+		elseif (AboutTexts[index] = "GIGABYTE® GA-970A-DS3P 2.0 AM3+ Motherboard")
 			CreateAndInitializeOutlinedText(outline, CurrentMinTextIndex, AboutTexts[index], 999, 13, 255, 255, AboutTextsBlue[index], 255, 0, 0, 0, 1, ScreenWidth/2, AboutTextsScreenY[index], 3)
 		elseif (AboutTexts[index] = "nVidia® GeForce GTX 970TT 4GB GDDR5 GPU")
 			CreateAndInitializeOutlinedText(outline, CurrentMinTextIndex, AboutTexts[index], 999, 15, 255, 255, AboutTextsBlue[index], 255, 0, 0, 0, 1, ScreenWidth/2, AboutTextsScreenY[index], 3)
@@ -1185,54 +1189,37 @@ function DisplayAboutScreen( )
 		NextScreenToDisplay = TitleScreen
 		SetupAboutScreenTexts()
 		DestroyAllGUI()
+		
+		AboutScreenOffsetY = 0
+		AboutScreenBackgroundY = 320
+		
 		ScreenIsDirty = TRUE
 	endif
 
-	if AboutTextsScreenY[NumberOfAboutScreenTexts-1] < -25 or MouseButtonLeft = ON or LastKeyboardChar = 32 or LastKeyboardChar = 13 or LastKeyboardChar = 27
+	if AboutScreenOffsetY > (AboutTextsScreenY[NumberOfAboutScreenTexts-1]+10) or MouseButtonLeft = ON or LastKeyboardChar = 32 or LastKeyboardChar = 13 or LastKeyboardChar = 27
 		ScreenFadeStatus = FadingToBlack
 		if AboutTextsScreenY[NumberOfAboutScreenTexts-1] > -25 then PlaySoundEffect(1)
 		SetDelayAllUserInput()
 	endif
 
 	index as integer
-	arrayLength as integer
-	textX as float
-	textY as float
-	indexTwo as integer
-	arrayLength = 25
-	if (GameWon = FALSE) then arrayLength = 0
-
 	if (ScreenFadeStatus = FadingIdle)
 		for index = 0 to (NumberOfAboutScreenTexts-1)
-			if (roundedFPS > 0) then dec AboutTextsScreenY[index], ( 3 * (30 / roundedFPS) )
-
-			for indexTwo = 0 to arrayLength
-				if GetTextExists(StartIndexOfAboutScreenTexts+(index*26)+indexTwo)
-					textX = GetTextX(StartIndexOfAboutScreenTexts+(index*26)+indexTwo)
-					textY = GetTextY(StartIndexOfAboutScreenTexts+(index*26)+indexTwo)
-					if (roundedFPS > 0) then dec textY, ( 3 * (30 / roundedFPS) )
-					
-					if ( AboutTextVisable[index] = 0 and textY < (640+30) )
-						SetTextVisible( (StartIndexOfAboutScreenTexts+(index*26)+indexTwo), 1 )
-						AboutTextVisable[index] = 1
-					elseif ( AboutTextVisable[index] = 1 and textY < (-30) )
-						SetTextVisible( (StartIndexOfAboutScreenTexts+(index*26)+indexTwo), 0 )
-						AboutTextVisable[index] = -1
-					endif						
-
-					if (index > 0)
-						SetTextPosition( StartIndexOfAboutScreenTexts+(index*26)+indexTwo, textX, textY )
-					else
-						SetTextPosition( StartIndexOfAboutScreenTexts+(index*26)+indexTwo, GetTextX(StartIndexOfAboutScreenTexts+(index*26)+indexTwo), textY )
-					endif
-				endif
-			next indexTwo
+			SetViewOffset( 0, AboutScreenOffsetY )
+			inc AboutScreenOffsetY, .02
+			inc AboutScreenBackgroundY, .02
+			if (GameWon = FALSE)
+				SetSpritePositionByOffset( TitleBG, ScreenWidth/2, AboutScreenBackgroundY )
+			elseif (GameWon = TRUE)
+				SetSpritePositionByOffset( StoryImage, ScreenWidth/2, AboutScreenBackgroundY )
+			endif
 		next index
 	endif
 
 	AnimateStaticBG()
 
 	if FadingToBlackCompleted = TRUE
+		SetViewOffset( 0, 0 )
 		DeleteImage(50009)
 
 		LoadInterfaceSprites()
