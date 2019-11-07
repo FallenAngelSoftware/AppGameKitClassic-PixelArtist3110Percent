@@ -114,7 +114,7 @@ function LoadOptionsAndHighScores ( )
 		next index
 
 		for index = 0 to 3
-			cookieValue = LoadSharedVariable( "SecretCodeCookie"+HTML5DataVersion+str(index), "No Value" )
+			cookieValue = LoadSharedVariable( "SecretCode"+HTML5DataVersion+str(index), "No Value" )
 			if (cookieValue <> "No Value") then SecretCode[index]= Val(cookieValue)
 		next index
 		
