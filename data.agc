@@ -99,32 +99,32 @@ function LoadOptionsAndHighScores ( )
 		endif
 	else
 		cookieValue as string
-		cookieValue = LoadSharedVariable("MusicVolume"+HTML5DataVersion, "No Value")
+		cookieValue = LoadSharedVariable(HTML5DataVersion+"MusicVolume", "No Value")
 		if (cookieValue <> "No Value") then MusicVolume = Val(cookieValue)
-		cookieValue = LoadSharedVariable("EffectsVolume"+HTML5DataVersion, "No Value")
+		cookieValue = LoadSharedVariable(HTML5DataVersion+"EffectsVolume", "No Value")
 		if (cookieValue <> "No Value") then EffectsVolume = Val(cookieValue)
-		cookieValue = LoadSharedVariable("GameMode"+HTML5DataVersion, "No Value")
+		cookieValue = LoadSharedVariable(HTML5DataVersion+"GameMode", "No Value")
 		if (cookieValue <> "No Value") then GameMode = Val(cookieValue)
-		cookieValue = LoadSharedVariable("SelectedBackground"+HTML5DataVersion, "No Value")
+		cookieValue = LoadSharedVariable(HTML5DataVersion+"SelectedBackground", "No Value")
 		if (cookieValue <> "No Value") then SelectedBackground = Val(cookieValue)
 
 		for index = 0 to 2
-			cookieValue = LoadSharedVariable( "LevelSkip"+HTML5DataVersion+str(index), "No Value" )
+			cookieValue = LoadSharedVariable( HTML5DataVersion+"LevelSkip"+str(index), "No Value" )
 			if (cookieValue <> "No Value") then LevelSkip[index]= Val(cookieValue)
 		next index
 
 		for index = 0 to 3
-			cookieValue = LoadSharedVariable( "SecretCode"+HTML5DataVersion+str(index), "No Value" )
+			cookieValue = LoadSharedVariable( HTML5DataVersion+"SecretCode"+str(index), "No Value" )
 			if (cookieValue <> "No Value") then SecretCode[index]= Val(cookieValue)
 		next index
 		
 		for mode = 0 to 2
 			for rank = 0 to 9
-				cookieValue = LoadSharedVariable( "HighscoreName"+HTML5DataVersion+str(mode)+str(rank), "No Value" )
+				cookieValue = LoadSharedVariable( HTML5DataVersion+"HighscoreName"+str(mode)+str(rank), "No Value" )
 				if (cookieValue <> "No Value") then HighScoreName [ mode, rank ] = cookieValue
-				cookieValue = LoadSharedVariable( "HighScoreLevel"+HTML5DataVersion+str(mode)+str(rank), "No Value" )
+				cookieValue = LoadSharedVariable( HTML5DataVersion+"HighScoreLevel"+str(mode)+str(rank), "No Value" )
 				if (cookieValue <> "No Value") then HighScoreLevel [ mode, rank ] = Val(cookieValue)
-				cookieValue = LoadSharedVariable( "HighScoreScore"+HTML5DataVersion+str(mode)+str(rank), "No Value" )
+				cookieValue = LoadSharedVariable( HTML5DataVersion+"HighScoreScore"+str(mode)+str(rank), "No Value" )
 				if (cookieValue <> "No Value") then HighScoreScore [ mode, rank ] = Val(cookieValue)
 			next rank
 		next mode
@@ -161,24 +161,24 @@ function SaveOptionsAndHighScores ( )
 			next mode
 		CloseFile ( 1 )
 	else
-		SaveSharedVariable( "MusicVolume"+HTML5DataVersion, str(MusicVolume) )
-		SaveSharedVariable( "EffectsVolume"+HTML5DataVersion, str(EffectsVolume) )
-		SaveSharedVariable( "GameMode"+HTML5DataVersion, str(GameMode) )
-		SaveSharedVariable( "SelectedBackground"+HTML5DataVersion, str(SelectedBackground) )
+		SaveSharedVariable( HTML5DataVersion+"MusicVolume", str(MusicVolume) )
+		SaveSharedVariable( HTML5DataVersion+"EffectsVolume", str(EffectsVolume) )
+		SaveSharedVariable( HTML5DataVersion+"GameMode", str(GameMode) )
+		SaveSharedVariable( HTML5DataVersion+"SelectedBackground", str(SelectedBackground) )
 
 		for index = 0 to 2
-			SaveSharedVariable( "LevelSkip"+HTML5DataVersion+str(index), str(LevelSkip[index]) )
+			SaveSharedVariable( HTML5DataVersion+"LevelSkip"+str(index), str(LevelSkip[index]) )
 		next index
 
 		for index = 0 to 3
-			SaveSharedVariable( "SecretCode"+HTML5DataVersion+str(index), str(SecretCode[index]) )
+			SaveSharedVariable( HTML5DataVersion+"SecretCode"+str(index), str(SecretCode[index]) )
 		next index
 		
 		for mode = 0 to 2
 			for rank = 0 to 9
-				SaveSharedVariable( "HighscoreName"+HTML5DataVersion+str(mode)+str(rank), HighScoreName [ mode, rank ] )
-				SaveSharedVariable( "HighScoreLevel"+HTML5DataVersion+str(mode)+str(rank), str(HighScoreLevel [ mode, rank ]) )
-				SaveSharedVariable( "HighScoreScore"+HTML5DataVersion+str(mode)+str(rank), str(HighScoreScore [ mode, rank ]) )
+				SaveSharedVariable( HTML5DataVersion+"HighscoreName"+str(mode)+str(rank), HighScoreName [ mode, rank ] )
+				SaveSharedVariable( HTML5DataVersion+"HighScoreLevel"+str(mode)+str(rank), str(HighScoreLevel [ mode, rank ]) )
+				SaveSharedVariable( HTML5DataVersion+"HighScoreScore"+str(mode)+str(rank), str(HighScoreScore [ mode, rank ]) )
 			next rank
 		next mode
 	endif
