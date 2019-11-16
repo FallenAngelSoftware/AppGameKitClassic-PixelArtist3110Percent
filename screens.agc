@@ -1176,7 +1176,7 @@ function DisplayAboutScreen( )
 		
 		LoadSelectedBackground()
 
-		if (GameWon = false)
+		if (GameWon = FALSE)
 			SetSpritePositionByOffset( TitleBG, ScreenWidth/2, ScreenHeight/2 )
 		else
 			LoadImage (50009, "\media\images\story\Story-10.png")
@@ -1192,27 +1192,39 @@ function DisplayAboutScreen( )
 		
 		AboutScreenOffsetY = 0
 		AboutScreenBackgroundY = 320
-		
+
+		AboutScreenFPSY = -200
+
 		ScreenIsDirty = TRUE
 	endif
 
 	if AboutScreenOffsetY > (AboutTextsScreenY[NumberOfAboutScreenTexts-1]+10) or MouseButtonLeft = ON or LastKeyboardChar = 32 or LastKeyboardChar = 13 or LastKeyboardChar = 27
 		ScreenFadeStatus = FadingToBlack
-		if AboutTextsScreenY[NumberOfAboutScreenTexts-1] > -25 then PlaySoundEffect(1)
+		if AboutScreenOffsetY < (AboutTextsScreenY[NumberOfAboutScreenTexts-1]+10) then PlaySoundEffect(1)
 		SetDelayAllUserInput()
+	endif
+
+	multiplier as float
+	if (PerformancePercent < 1)
+		multiplier = .02
+	else
+		multiplier = .02 * (PerformancePercent)
 	endif
 
 	index as integer
 	if (ScreenFadeStatus = FadingIdle)
 		for index = 0 to (NumberOfAboutScreenTexts-1)
 			SetViewOffset( 0, AboutScreenOffsetY )
-			inc AboutScreenOffsetY, .02
-			inc AboutScreenBackgroundY, .02
+			inc AboutScreenOffsetY, multiplier
+			inc AboutScreenBackgroundY, multiplier
+			inc AboutScreenFPSY, multiplier
 			if (GameWon = FALSE)
 				SetSpritePositionByOffset( TitleBG, ScreenWidth/2, AboutScreenBackgroundY )
 			elseif (GameWon = TRUE)
 				SetSpritePositionByOffset( StoryImage, ScreenWidth/2, AboutScreenBackgroundY )
 			endif
+			
+			if (SecretCodeCombined = 2777) then SetSpritePositionByOffset( FadingBlackBG, -80, AboutScreenFPSY )
 		next index
 	endif
 
@@ -1220,7 +1232,7 @@ function DisplayAboutScreen( )
 
 	if FadingToBlackCompleted = TRUE
 		SetViewOffset( 0, 0 )
-		DeleteImage(50009)
+		if (GameWon = TRUE) then DeleteImage(50009)
 
 		LoadInterfaceSprites()
 		PreRenderButtonsWithTexts()
@@ -2191,12 +2203,65 @@ function DisplayNewHighScoreNameInputScreen ( )
 
 		NextScreenToDisplay = HighScoresScreen
 
+CurrentIconBeingPressed = -1
+
 		ScreenIsDirty = TRUE
 	endif
 
+	shiftAddition as integer
+	shiftAddition = 0
+	if ShiftKeyPressed = FALSE then inc shiftAddition, 26
+	
+	if DelayAllUserInput = 0
+		index = LastKeyboardChar
+		if (LastKeyboardChar >= 65 and LastKeyboardChar <= 90)
+			IconAnimationTimer[ (index-65) + shiftAddition ] = 2
+			CurrentIconBeingPressed = index
+
+			if (CurrentKeyboardKeyPressed < 2)
+				inc NewHighScoreNameIndex, 1
+				NewHighScoreCurrentName = NewHighScoreCurrentName + IconText[(index-65) + 10 + shiftAddition]
+				CurrentKeyboardKeyPressed = 2
+			endif
+		elseif (LastKeyboardChar >= 48 and LastKeyboardChar <= 57)
+			IconAnimationTimer[ (index+4) ] = 2
+			CurrentIconBeingPressed = index
+
+			if (CurrentKeyboardKeyPressed < 2)
+				inc NewHighScoreNameIndex, 1
+				NewHighScoreCurrentName = NewHighScoreCurrentName + IconText[index+4+10]
+				CurrentKeyboardKeyPressed = 2
+			endif
+		elseif LastKeyboardChar = 32
+			IconAnimationTimer[26+37] = 2
+			CurrentIconBeingPressed = 26+37
+
+			if (CurrentKeyboardKeyPressed < 2)
+				inc NewHighScoreNameIndex, 1
+				NewHighScoreCurrentName = NewHighScoreCurrentName + IconText[26+37+10]
+				CurrentKeyboardKeyPressed = 2
+			endif
+		elseif LastKeyboardChar = 107
+			IconAnimationTimer[72-10] = 2
+			CurrentIconBeingPressed = 72
+
+			if (CurrentKeyboardKeyPressed < 2)
+				inc NewHighScoreNameIndex, 1
+				NewHighScoreCurrentName = NewHighScoreCurrentName + IconText[72]
+				CurrentKeyboardKeyPressed = 2
+			endif
+		elseif LastKeyboardChar = 8
+			IconAnimationTimer[26+38] = 2
+			CurrentIconBeingPressed = 26+38
+
+			CurrentKeyboardKeyPressed = index
+		else
+			if (CurrentKeyboardKeyPressed > -1) then dec CurrentKeyboardKeyPressed, 1
+		endif
+	endif
+
 	for index = 0 to 63
-		if ThisIconWasPressed(index)
-			SetDelayAllUserInput()
+		if ThisIconWasPressed(index) and CurrentKeyboardKeyPressed = -1
 			inc NewHighScoreNameIndex, 1
 			NewHighScoreCurrentName = NewHighScoreCurrentName + IconText[10+index]
 		endif
@@ -2208,46 +2273,9 @@ function DisplayNewHighScoreNameInputScreen ( )
 		NewHighScoreCurrentName = left( NewHighScoreCurrentName, len(NewHighScoreCurrentName) -1 )
 	endif
 
-	if NewHighScoreNameIndex > 13
-		NewHighScoreNameIndex = 13
+	if NewHighScoreNameIndex > 9
+		NewHighScoreNameIndex = 9
 		NewHighScoreCurrentName= left( NewHighScoreCurrentName, len(NewHighScoreCurrentName) -1 )
-	endif
-
-	shiftAddition as integer
-	shiftAddition = 0
-	if ShiftKeyPressed = FALSE then inc shiftAddition, 26
-		if DelayAllUserInput = 0
-			
-		for index = 65 to 90
-			if LastKeyboardChar = index
-				IconAnimationTimer[ (index-65) + shiftAddition ] = 2
-				PlaySoundEffect(1)
-				SetDelayAllUserInput()
-			endif
-		next index
-
-		for index = 48 to 57
-			if LastKeyboardChar = index
-				IconAnimationTimer[ (index+4) ] = 2
-				PlaySoundEffect(1)
-				SetDelayAllUserInput()
-			endif
-		next index
-
-		if LastKeyboardChar = 107
-			IconAnimationTimer[26+36] = 2
-			PlaySoundEffect(1)
-			SetDelayAllUserInput()
-		elseif LastKeyboardChar = 32
-			IconAnimationTimer[26+37] = 2
-			PlaySoundEffect(1)
-			SetDelayAllUserInput()
-
-		elseif LastKeyboardChar = 8
-			IconAnimationTimer[26+38] = 2
-			PlaySoundEffect(1)
-			SetDelayAllUserInput()
-		endif
 	endif
 
 	if ThisButtonWasPressed(5) = TRUE
@@ -2261,6 +2289,7 @@ function DisplayNewHighScoreNameInputScreen ( )
 
 	if FadingToBlackCompleted = TRUE
 		HighScoreName [ GameMode, PlayerRankOnGameOver ] = NewHighScoreCurrentName
+		SaveOptionsAndHighScores()
 	endif
 endfunction
 
@@ -2341,8 +2370,8 @@ function DisplayNewHighScoreNameInputAndroidScreen ( )
 		NewHighScoreCurrentName = left( NewHighScoreCurrentName, len(NewHighScoreCurrentName) -1 )
 	endif
 
-	if NewHighScoreNameIndex > 13
-		NewHighScoreNameIndex = 13
+	if NewHighScoreNameIndex > 9
+		NewHighScoreNameIndex = 9
 		NewHighScoreCurrentName= left( NewHighScoreCurrentName, len(NewHighScoreCurrentName) -1 )
 	endif
 
@@ -2394,6 +2423,7 @@ function DisplayNewHighScoreNameInputAndroidScreen ( )
 
 	if FadingToBlackCompleted = TRUE
 		HighScoreName [ GameMode, PlayerRankOnGameOver ] = NewHighScoreCurrentName
+		SaveOptionsAndHighScores()
 	endif
 endfunction
 	
@@ -2417,25 +2447,23 @@ function DisplayCutSceneScreen( )
 			LoadImage ( 50002, "\media\images\story\Story-3.png" )
 		elseif (Level = 4)
 			LoadImage ( 50003, "\media\images\story\Story-4.png" )
-//		LoadImage ( 50004, "\media\images\story\Story-5.png" )
-//		LoadImage ( 50005, "\media\images\story\Story-6.png" )
-//		LoadImage ( 50006, "\media\images\story\Story-7.png" )
-//		LoadImage ( 50007, "\media\images\story\Story-8.png" )
-//		LoadImage ( 50008, "\media\images\story\Story-9.png" )
-//		LoadImage ( 50009, "\media\images\story\Story-10.png" )
+		elseif (Level = 5)
+			LoadImage ( 50004, "\media\images\story\Story-5.png" )
+		elseif (Level = 6)
+			LoadImage ( 50005, "\media\images\story\Story-6.png" )
+		elseif (Level = 7)
+			LoadImage ( 50006, "\media\images\story\Story-7.png" )
+		elseif (Level = 8)
+			LoadImage ( 50007, "\media\images\story\Story-8.png" )
+		elseif (Level = 9)
+			LoadImage ( 50008, "\media\images\story\Story-9.png" )
 		endif
 
-		if (Level > 4)
-			LoadImage ( 71111, "\media\images\story\Story-Temp.png" )
-			StoryImage = CreateSprite ( 71111 )
-		else
-			StoryImage = CreateSprite ( 50000 + (Level-1) )
-		endif
+		StoryImage = CreateSprite ( 50000 + (Level-1) )
+		
 		SetSpriteOffset( StoryImage, (GetSpriteWidth(StoryImage)/2) , (GetSpriteHeight(StoryImage)/2) ) 
 		SetSpriteDepth( StoryImage, 4 )
 		SetSpritePositionByOffset( StoryImage, ScreenWidth/2, ScreenHeight/2 )
-		
-		if (Level > 4) then CreateAndInitializeOutlinedText(TRUE, CurrentMinTextIndex, "More Story Soon!", 999, 32, 255, 255, 0, 255, 0, 0, 0, 1, ScreenWidth/2, ScreenHeight/2, 3)
 		
 		ScreenDisplayTimer = 200
 		NextScreenToDisplay = PlayingScreen
@@ -2474,11 +2502,11 @@ function DisplayCutSceneScreen( )
 		DeleteImage(50001)
 		DeleteImage(50002)
 		DeleteImage(50003)
-/*		DeleteImage(50004)
+		DeleteImage(50004)
 		DeleteImage(50005)
 		DeleteImage(50006)
 		DeleteImage(50007)
 		DeleteImage(50008)
-		DeleteImage(50009) */
+		DeleteImage(50009)
 	endif
 endfunction

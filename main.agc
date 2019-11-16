@@ -12,7 +12,7 @@ remstart
           |  __/| |>  <  __/ |  / ___ \| |  | |_| \__ \ |_   ___) | | | | |_| / /_ 
           |_|   |_/_/\_\___|_| /_/   \_\_|   \__|_|___/\__| |____/  |_|_|\___/_/(_)                                                                    
 
-                                     Retail2 110% - v3.2.5              "Turbo!"
+                                     Retail2 110% - v3.2.8              "Turbo!"
 
 ---------------------------------------------------------------------------------------------------     
 
@@ -34,11 +34,16 @@ remend
 #include "visuals.agc"
 
 global GameVersion as string
-GameVersion = "''Retail2 110% - Turbo! - v3.2.5''"
+GameVersion = "''Retail2 110% - Turbo! - v3.2.8''"
 global DataVersion as string
-DataVersion = "PA3-Retail2-110-Turbo-v3_2_5.cfg"
+DataVersion = "PA3-Retail2-110-Turbo-v3_2_8.cfg"
 global HTML5DataVersion as String
-HTML5DataVersion = "PA3-v3_2_5-"
+HTML5DataVersion = "PA3-v3_2_8-"
+
+global MaximumFrameRate as integer
+MaximumFrameRate = 0
+
+global PerformancePercent as float
 
 #option_explicit
 SetErrorMode(2)
@@ -376,6 +381,8 @@ StartIndexOfAboutScreenTexts = 0
 
 global AboutScreenOffsetY as float
 global AboutScreenBackgroundY as float
+global AboutScreenFPSY as float
+AboutScreenFPSY = -200
 
 global AboutScreenTextFrameSkip as integer
 
@@ -629,6 +636,15 @@ LoadAboutScreenTexts()
 
 PlayNewMusic(0, 1)
 
+global CurrentIconBeingPressed as integer
+CurrentIconBeingPressed = -1
+global CurrentKeyboardKeyPressed as integer
+CurrentKeyboardKeyPressed = -1
+/*
+Score = 5555
+Level = 5
+ScreenToDisplay = NewHighScoreNameInputScreen
+*/
 do
 	inc FrameCount, 1
 		
@@ -703,6 +719,8 @@ do
 
 	roundedFPS = Round( ScreenFPS() )
 
+	PerformancePercent = (30 / roundedFPS)
+
 	if (FrameCount > roundedFPS)
 		FrameCount = 0
 		inc SecondsSinceStart, 1
@@ -710,7 +728,11 @@ do
 
 	if (SecretCodeCombined = 2777 and ScreenIsDirty = TRUE)
 		if (ScreenFadeStatus = FadingIdle)
-			SetSpritePositionByOffset( FadingBlackBG,  -80, -200 )
+			if (ScreenToDisplay = AboutScreen)
+				SetSpritePositionByOffset( FadingBlackBG,  -80, AboutScreenFPSY )
+			else
+				SetSpritePositionByOffset( FadingBlackBG,  -80, -200 )
+			endif			
 			SetSpriteColorAlpha( FadingBlackBG, 200 )
 		else
 			SetSpritePositionByOffset( FadingBlackBG,  ScreenWidth/2, ScreenHeight/2 )
