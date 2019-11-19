@@ -12,7 +12,7 @@ remstart
           |  __/| |>  <  __/ |  / ___ \| |  | |_| \__ \ |_   ___) | | | | |_| / /_ 
           |_|   |_/_/\_\___|_| /_/   \_\_|   \__|_|___/\__| |____/  |_|_|\___/_/(_)                                                                    
 
-                                     Retail2 110% - v3.2.8              "Turbo!"
+                                     Retail2 110% - v3.3.0              "Turbo!"
 
 ---------------------------------------------------------------------------------------------------     
 
@@ -34,11 +34,11 @@ remend
 #include "visuals.agc"
 
 global GameVersion as string
-GameVersion = "''Retail2 110% - Turbo! - v3.2.8''"
+GameVersion = "''Retail2 110% - Turbo! - v3.3.0''"
 global DataVersion as string
-DataVersion = "PA3-Retail2-110-Turbo-v3_2_8.cfg"
+DataVersion = "PA3-Retail2-110-Turbo-v3_3_0.cfg"
 global HTML5DataVersion as String
-HTML5DataVersion = "PA3-v3_2_8-"
+HTML5DataVersion = "PA3-v3_3_0-"
 
 global MaximumFrameRate as integer
 MaximumFrameRate = 0
@@ -719,7 +719,11 @@ do
 
 	roundedFPS = Round( ScreenFPS() )
 
-	PerformancePercent = (30 / roundedFPS)
+	if (roundedFPS > 0)
+		PerformancePercent = (30 / roundedFPS)
+	else
+		PerformancePercent = 1
+	endif
 
 	if (FrameCount > roundedFPS)
 		FrameCount = 0
