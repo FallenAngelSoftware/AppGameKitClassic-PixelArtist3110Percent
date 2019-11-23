@@ -1195,6 +1195,8 @@ function DisplayAboutScreen( )
 
 		AboutScreenFPSY = -200
 
+		multiplier = 3
+
 		ScreenIsDirty = TRUE
 	endif
 
@@ -1204,28 +1206,24 @@ function DisplayAboutScreen( )
 		SetDelayAllUserInput()
 	endif
 
-	multiplier as float
-	if (PerformancePercent < 1)
-		multiplier = .02
-	else
-		multiplier = .02 * (PerformancePercent)
+	if (PerformancePercent > 1)
+		multiplier = 3 * PerformancePercent
 	endif
 
-	index as integer
 	if (ScreenFadeStatus = FadingIdle)
-		for index = 0 to (NumberOfAboutScreenTexts-1)
-			SetViewOffset( 0, AboutScreenOffsetY )
-			inc AboutScreenOffsetY, multiplier
-			inc AboutScreenBackgroundY, multiplier
-			inc AboutScreenFPSY, multiplier
+		inc AboutScreenOffsetY, multiplier
+		inc AboutScreenBackgroundY, multiplier
+		inc AboutScreenFPSY, multiplier
+		
 			if (GameWon = FALSE)
 				SetSpritePositionByOffset( TitleBG, ScreenWidth/2, AboutScreenBackgroundY )
 			elseif (GameWon = TRUE)
 				SetSpritePositionByOffset( StoryImage, ScreenWidth/2, AboutScreenBackgroundY )
 			endif
-			
-			if (SecretCodeCombined = 2777) then SetSpritePositionByOffset( FadingBlackBG, -80, AboutScreenFPSY )
-		next index
+
+		if (SecretCodeCombined = 2777) then SetSpritePositionByOffset( FadingBlackBG, -80, AboutScreenFPSY )
+
+		SetViewOffset( 0, AboutScreenOffsetY )
 	endif
 
 	AnimateStaticBG()
