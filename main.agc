@@ -12,7 +12,7 @@ remstart
           |  __/| |>  <  __/ |  / ___ \| |  | |_| \__ \ |_   ___) | | | | |_| / /_ 
           |_|   |_/_/\_\___|_| /_/   \_\_|   \__|_|___/\__| |____/  |_|_|\___/_/(_)                                                                    
 
-                                     Retail2 110% - v3.3.3              "Turbo!"
+                                     Retail2 110% - v3.3.5              "Turbo!"
 
 ---------------------------------------------------------------------------------------------------     
 
@@ -34,11 +34,11 @@ remend
 #include "visuals.agc"
 
 global GameVersion as string
-GameVersion = "''Retail2 110% - Turbo! - v3.3.3''"
+GameVersion = "''Retail2 110% - Turbo! - v3.3.5''"
 global DataVersion as string
-DataVersion = "PA3-Retail2-110-Turbo-v3_3_3.cfg"
+DataVersion = "PA3-Retail2-110-Turbo-v3_3_5.cfg"
 global HTML5DataVersion as String
-HTML5DataVersion = "PA3-v3_3_3-"
+HTML5DataVersion = "PA3-v3_3_5-"
 
 global MaximumFrameRate as integer
 MaximumFrameRate = 0
