@@ -284,12 +284,15 @@ function DisplayTitleScreen( )
 		startScreenY as integer = 244
 		inc startScreenY, offsetY
 		offsetScreenY as integer = 43
+		if (OnMobile = TRUE) then offsetScreenY = 48
 		CreateButton( 0, (ScreenWidth / 2), startScreenY + (offsetScreenY*0) )
 		CreateButton( 1, (ScreenWidth / 2), startScreenY + (offsetScreenY*1) )
 		CreateButton( 2, (ScreenWidth / 2), startScreenY + (offsetScreenY*2) )
 		CreateButton( 3, (ScreenWidth / 2), startScreenY + (offsetScreenY*3) )
 		CreateButton( 4, (ScreenWidth / 2), startScreenY + (offsetScreenY*4) )
-		CreateButton( 5, (ScreenWidth / 2), startScreenY + (offsetScreenY*5) )
+		if (OnMobile = FALSE)
+			CreateButton( 5, (ScreenWidth / 2), startScreenY + (offsetScreenY*5) )
+		endif
 
 		SetSpritePositionByOffset( ScreenLine[2], ScreenWidth/2, ScreenHeight-165+offsetY+13 )
 		SetSpriteColor(ScreenLine[2], 255, 255, 255, 255)
@@ -350,12 +353,12 @@ function DisplayTitleScreen( )
 		NextScreenToDisplay = AboutScreen
 		ScreenFadeStatus = FadingToBlack
 	elseif ThisButtonWasPressed(5) = TRUE
-		if Platform = Android
-			ExitGame = 1
-		elseif Platform = Web
-			OpenBrowser( "http://www.fallenangelsoftware.com" )
-		elseif (Platform = Windows or Platform = Linux)
-			ExitGame = 1		
+		if (OnMobile = FALSE)
+			if Platform = Web
+				OpenBrowser( "http://www.fallenangelsoftware.com" )
+			else
+				ExitGame = 1
+			endif
 		endif
 	elseif ThisIconWasPressed(2) = TRUE
 		MusicVolume = 100
@@ -1207,7 +1210,7 @@ function DisplayAboutScreen( )
 	endif
 
 	if (PerformancePercent > 1)
-		multiplier = 3 * PerformancePercent
+		multiplier = 1.5 * PerformancePercent
 	endif
 
 	if (ScreenFadeStatus = FadingIdle)
@@ -1672,7 +1675,7 @@ function DisplayPlayingScreen( )
 		screenX = 30
 		for indexY = 0 to 6
 			for indexX = 0 to 6
-				BlockedText[indexX, indexY] = CreateAndInitializeOutlinedText(TRUE, CurrentMinTextIndex, " ", 999, 30, 0, 0, 0, 255, 0, 0, 0, 1, screenX, screenY, 3)
+				BlockedText[indexX, indexY] = CreateAndInitializeOutlinedText(TRUE, CurrentMinTextIndex, " ", 999, 30, 0, 0, 0, 255, 255, 255, 255, 1, screenX, screenY, 3)
 				inc screenY, 50
 			next indexX
 			

@@ -12,7 +12,7 @@ remstart
           |  __/| |>  <  __/ |  / ___ \| |  | |_| \__ \ |_   ___) | | | | |_| / /_ 
           |_|   |_/_/\_\___|_| /_/   \_\_|   \__|_|___/\__| |____/  |_|_|\___/_/(_)                                                                    
 
-                                     Retail2 110% - v3.3.5              "Turbo!"
+                                     Retail2 110% - v3.3.7              "Turbo!"
 
 ---------------------------------------------------------------------------------------------------     
 
@@ -34,11 +34,11 @@ remend
 #include "visuals.agc"
 
 global GameVersion as string
-GameVersion = "''Retail2 110% - Turbo! - v3.3.5''"
+GameVersion = "''Retail2 110% - Turbo! - v3.3.7''"
 global DataVersion as string
-DataVersion = "PA3-Retail2-110-Turbo-v3_3_5.cfg"
+DataVersion = "PA3-Retail2-110-Turbo-v3_3_6.cfg"
 global HTML5DataVersion as String
-HTML5DataVersion = "PA3-v3_3_5-"
+HTML5DataVersion = "PA3-v3_3_6-"
 
 global MaximumFrameRate as integer
 MaximumFrameRate = 0
@@ -86,7 +86,8 @@ if ( GetDeviceBaseName() = "android" or GetDeviceBaseName() = "ios" )
 	ShowCursor = FALSE
 else
 	Platform = Web
-	SetSyncRate( 30, 1 )
+//	SetSyncRate( 30, 1 )
+	SetVSync( 1 )
 	SetScissor( 0, 0, ScreenWidth, ScreenHeight )
 	OnMobile = FALSE
 	ShowCursor = TRUE
@@ -115,6 +116,12 @@ global MouseScreenY = 0
 #constant ON			1
 global MouseButtonLeft = OFF
 global MouseButtonLeftJustClicked as integer
+global MouseButtonLeftReleased as integer
+MouseButtonLeftReleased = TRUE
+global MouseButtonRight = OFF
+global MouseButtonRightJustClicked as integer
+global MouseButtonRightReleased as integer
+MouseButtonRightReleased = TRUE
 
 global ShiftKeyPressed as integer
 ShiftKeyPressed = FALSE
@@ -126,6 +133,17 @@ ShiftKeyPressed = FALSE
 #constant JoyLEFT			4
 global JoystickDirection as integer
 JoystickDirection = JoyCENTER
+
+global JoystickButtonOne as integer
+JoystickButtonOne = OFF
+global JoyButtonOneReleased as integer
+JoyButtonOneReleased = TRUE
+global JoystickButtonTwo as integer
+JoystickButtonTwo = OFF
+global JoyButtonTwoReleased as integer
+JoyButtonTwoReleased = TRUE
+
+global KeyboardControls as integer
 
 global LastKeyboardChar = -1
 
@@ -622,6 +640,17 @@ FramesPerSecond = 30
 
 LoadOptionsAndHighScores()
 SetVolumeOfAllMusicAndSoundEffects()
+/*
+major as integer
+minor as integer
+for major = 0 to 99
+	for minor = 0 to 99
+		DeleteSharedVariable( "PA3-v3_"+str(major)+"_"+str(minor)+ "-" ) 
+	next minor
+next major
+
+SaveOptionsAndHighScores()
+*/
 SecretCodeCombined = ( (SecretCode[0]*1000) + (SecretCode[1]*100) + (SecretCode[2]*10) + (SecretCode[3]) )
 
 global ScreenIsDirty as integer
@@ -722,7 +751,7 @@ do
 	roundedFPS = Round( ScreenFPS() )
 
 	if (roundedFPS > 0)
-		PerformancePercent = (30 / roundedFPS)
+		PerformancePercent = (60 / roundedFPS)
 	else
 		PerformancePercent = 1
 	endif

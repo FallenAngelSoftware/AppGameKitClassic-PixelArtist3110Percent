@@ -1,10 +1,14 @@
 // "input.agc"...
 
 function GetAllUserInput ( )
+	if (ScreenToDisplay = PlayingScreen) then MouseButtonLeftReleased = TRUE
 	MouseButtonLeft = OFF
+	MouseButtonRight = OFF
 	LastKeyboardChar = -1
 	ShiftKeyPressed = FALSE
 	JoystickDirection = JoyCENTER
+	JoystickButtonOne = OFF
+	JoystickButtonTwo = OFF
 	
 	if (DelayAllUserInput > 0)
 		dec DelayAllUserInput, 1
@@ -17,11 +21,24 @@ function GetAllUserInput ( )
 		MouseScreenX = GetRawMouseX()
 		MouseScreenY = GetRawMouseY()
 
-		if ( GetRawMouseLeftState() = 1 )
-			MouseButtonLeft = ON
-			MouseButtonLeftJustClicked = 0
+		if ( GetRawMouseLeftState() )
+			if (MouseButtonLeftReleased = TRUE)
+				MouseButtonLeft = ON
+				MouseButtonLeftJustClicked = 0
+				MouseButtonLeftReleased = FALSE
+			endif
 		else
-			MouseButtonLeft = OFF
+			MouseButtonLeftReleased = TRUE
+		endif
+
+		if ( GetRawMouseRightState() )
+			if (MouseButtonRightReleased = TRUE)
+				MouseButtonRight = ON
+				MouseButtonRightJustClicked = 0
+				MouseButtonRightReleased = FALSE
+			endif
+		else
+			MouseButtonRightReleased = TRUE
 		endif
 	else
 		MouseScreenX = GetPointerX()
